@@ -11,9 +11,6 @@ const execute = async (
 		(role: Discord.Role) => role.name === "Color " + input,
 	);
 
-	console.log(colorRole);
-	console.log(input);
-	console.log(member.roles);
 	if (!colorRole) {
 		return await interaction.followUp("Please provide a valid color");
 	} else {
@@ -31,7 +28,7 @@ const execute = async (
 
 module.exports = {
 	name: "color",
-	description: "Choose a color (purely for visual/fun purposes)",
+	description: "Change your Discord color",
 	type: 1,
 	options: [
 		{
@@ -41,7 +38,7 @@ module.exports = {
 			required: true,
 		},
 	],
-	run: async (client: Discord.Client, interaction: any, args: any) => {
+	run: async (client: Discord.Client, interaction: any) => {
 		await interaction.deferReply({ ephemeral: false }); // Bot is thinking...
 
 		return await execute(client, interaction);
