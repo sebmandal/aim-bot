@@ -27,14 +27,14 @@ const execute = async (
 };
 
 module.exports = {
-	name: "color",
-	description: "Change your Discord color",
+	name: "farge",
+	description: "Endre Discord fargen din",
 	type: 1,
 	options: [
 		{
 			name: "input",
 			type: 3,
-			description: "Your color role number",
+			description: "Velg et nummer",
 			required: true,
 		},
 	],

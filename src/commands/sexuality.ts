@@ -2,52 +2,56 @@ import * as Discord from "discord.js";
 import { readFileSync } from "fs";
 
 const execute = async (client: Discord.Client, interaction: any) => {
-	// read all pronouns from the file
-	const pronouns = JSON.parse(readFileSync("./data/pronouns.json", "utf8"));
+	// read all sexualities from the file
+	const sexualities = JSON.parse(
+		readFileSync("./data/sexuality.json", "utf8"),
+	);
 
 	if (!interaction.options.get("input")) {
 		const embed = new Discord.MessageEmbed({
-			title: "Pronomen",
-			description: pronouns
-				.map((pronoun: any) => pronoun.name)
+			title: "Seksualiteter",
+			description: sexualities
+				.map((sexuality: any) => sexuality.name)
 				.join(",\n"),
 		});
 		return await interaction.followUp({ embeds: [embed] });
 	}
 
-	// example: { name: "he/him", id: "0001" }
+	// example: { name: "gay", id: "Discord role ID" }
 	const input = interaction.options.get("input").value;
-	const pronoun = pronouns.find((pronoun: any) => pronoun.name === input);
+	const sexuality = sexualities.find(
+		(sexuality: any) => sexuality.name === input,
+	);
 
 	interaction.member.roles.cache.forEach((role: Discord.Role) => {
-		pronouns.forEach((pronoun: any) => {
-			if (role.name.toLowerCase() === pronoun.name.toLowerCase()) {
+		sexualities.forEach((sexuality: any) => {
+			if (role.name.toLowerCase() === sexuality.name.toLowerCase()) {
 				interaction.member.roles.remove(role);
 			}
 		});
 	});
 
-	if (!pronoun) {
-		// if the pronoun is not found, return an error
+	if (!sexuality) {
+		// if the sexuality is not found, return an error
 		return await interaction.followUp(
-			"Unfortunately, that pronoun doesn't exist! <@!399596706402009100> go add it",
+			"Unfortunately, that sexuality doesn't exist in our database! <@!399596706402009100> go add it",
 		);
 	} else {
-		// otherwise, return the pronoun
-		await interaction.member.roles.add(pronoun.id);
+		// otherwise, return the sexuality
+		await interaction.member.roles.add(sexuality.id);
 		return await interaction.followUp("Gave you the role!");
 	}
 };
 
 module.exports = {
-	name: "pronomen",
-	description: "Se alle og endre dine Discord pronomen",
+	name: "seksualitet",
+	description: "Se alle og endre din Discord seksualitet",
 	type: 1,
 	options: [
 		{
 			name: "input",
 			type: 3,
-			description: "Dine pronomen",
+			description: "Din seksualitet",
 			required: false,
 		},
 	],

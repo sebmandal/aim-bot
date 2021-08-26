@@ -1,26 +1,23 @@
 import * as Discord from "discord.js";
+import { readdir, readdirSync } from "fs";
 
 const execute = async (
 	client: Discord.Client,
 	interaction: Discord.CommandInteraction,
 ) => {
+	const commands = readdirSync("./dist/commands", "utf8").map((file) =>
+		file.replace(".js", ""),
+	);
+
+	const fields = commands.map((command) => {
+		const name = require(`../commands/${command}`).name;
+		const description = require(`../commands/${command}`).description;
+		return { name, value: description };
+	});
+
 	const embed = new Discord.MessageEmbed({
 		title: "Help",
-		description: "This help command",
-		fields: [
-			{
-				name: "/color",
-				value: "Change your color",
-			},
-			{
-				name: "/pronouns",
-				value: "Change your pronouns",
-			},
-			{
-				name: "/help",
-				value: "This help message",
-			},
-		],
+		fields: fields,
 	});
 	return interaction.followUp({
 		embeds: [embed],
@@ -28,9 +25,10 @@ const execute = async (
 };
 
 module.exports = {
-	name: "help",
-	description: "Help command",
-	type: 2,
+	name: "hjelp",
+	description: "Informasjon om botten",
+	type: 1,
+	options: [],
 	run: async (client: Discord.Client, interaction: any) => {
 		await interaction.deferReply({ ephemeral: false }); // Bot is thinking...
 

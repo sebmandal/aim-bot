@@ -31,7 +31,7 @@ export const onInteractionCreate = async (
 
 export const onReady = async (client: Discord.Client) => {
 	// setting the activity to "Listening to /color"
-	client.user.setActivity(`/help`, {
+	client.user.setActivity(`/hjelp`, {
 		type: "LISTENING",
 	});
 
